@@ -1,2 +1,0 @@
-# deep-RL
-Project website
