@@ -39,9 +39,11 @@ knitr::opts_chunk$set(fig.align="center")
 
 # Preamble
 
-Whether we are engaging in a daily conversation or to driving a vehicle, essentially we are picking up on our surrounding environment and making a response simultaneously to the changes in the environment. Essentially, we are learning from our interaction with the environment and executing an action in return. This is the foundation idea that lies in all learning and intelligence [@sutton2018]. A machine learning technique to train software to make decision to achieve the optimal result by performing a sequence of actions in an environment is known as *reinforcement learning* [citation]. A reinforcement learning environment is formalized by an optimal control of Markov decision processes, which can be decompose into three essential parts - sensation, action, and goal [@sutton2018]. A learning agent should be able to sense the state of the environment, and takes series of actions that effects the state and achieve a goal overtime.
+Whether we are engaging in a daily conversation or driving a vehicle, essentially we are picking up on our surrounding environment and making a response simultaneously to the changes in the environment. That is, we are learning from our interaction with the environment and executing an action in return. This is the foundation idea that lies in all learning and intelligence [@sutton2018]. A machine learning technique to train software to make decision to achieve the optimal result by performing a sequence of actions in an environment is known as *reinforcement learning* [citation]. A reinforcement learning environment is formalized by an optimal control of Markov decision processes, which can be decompose into three essential parts - sensation, action, and goal [@sutton2018]. A learning agent should be able to sense the state of the environment, and takes series of actions that effects the state and achieve a goal overtime.
 
-The idea of reinforcement learning is further extended to *deep reinforcement learning* that handles more sophisticated tasks. Deep reinforcement learning allows the agent to perform on real-world complexity in higher dimensions by training through deep neural networks. A novel artificial agent, deep Q-network agent was first introduced by Mnih et al. (2015).
+The idea of reinforcement learning is further extended to *deep reinforcement learning* that handles more sophisticated tasks. Deep reinforcement learning allows the agent to perforAm on real-world complexity in higher dimensions by combining reinforcement learning with a class of deep neural networks. A novel artificial agent, deep Q-network agent was recently introduced by Mnih et al. (2015). The authors implemented Q-learning with conventional neural networks, and evaluated their DQN agent with Atari 2600 and other game platforms. We will describe the mathematical concepts and learning process in the sections below to give a comprehensive introduction of deep reinforcement learning.
+
+We will begin by introducing the fundamentals of reinforcement learning known as Q-learning, then dive into the deep learning deviation of the Q-learning algorithm, namely deep Q learning.
 
 # Summary of Notations
 
@@ -65,55 +67,59 @@ The idea of reinforcement learning is further extended to *deep reinforcement le
 
 ## Q-learning Algorithm
 
-In order to teach the agent to achieve the maximum reward, and tie the reward to the actions, we can define the **Optimal action-value function**:
+A reinforcement learning environment follows a large finite **Markov decision process** (MDP). In reinforcement learning, MDP is a stochastic decision process that is comprised of 4 tuples: finite set of states, finite set of actions, state transition function, and reward function. In the MDP model, Markov property also holds, in which the next state and the expected reward at $t+1$ only depends on the state at time $t$ and action at time $t$ and not on any other prior events [@Kaelbling1998]. A policy is a behavior of an agent at a given time, which mathematically takes the state as an input and returns action as output: $\pi(s) \rightarrow a$. The goal of the agent is to select actions from a set of actions $\{a_1,\cdots,a_k\}$ in a way that maximizes the future reward. There's a standard assumption in Q-learning that assumes the future rewards are discounted by a factor $\gamma$ per time step, and defines the future discounted return at time $t$ as:
+
 $$
+R_t = \sum^T_{t' = t} \gamma^{t-t'}r_{t'}
+$$
+
+where T is the final time step, $r_{t'}$ is the reward at time $t'$, and the term $\gamma^{t-t'}$ diminishes as we increase in time.
+
+In order to teach the agent to achieve the maximum reward, and tie the reward to the actions, we can define the **Optimal action-value function**: $$
 Q^*(s,a) = \max_{\pi} \mathbb{E}[R_t | s_t = s, a_t = a, \pi]
 $$
+
 Where, $\pi$ is the policy to guide the action, $s$ is the current state, $a$ is the current action, and $R_t$ is the total reward at time $t$.
 
 This function obey *Bellman equation*, which is based on the following intuition: the expected return for taking the optimal action from a given state is the sum of the immediate reward from the current state to the next state, and the expected return from the next state to the goal state. Following this equation, The optimal action-value function can be expressed as:
 
 $$
 Q^*(s,a) = \mathbb{E}_{s'}[r + \gamma \max_{a'} Q^*(s',a') | s,a]
-$$
-Where $r$ is the current reward, $\gamma$ is the discount rate parameter, $s'$ is the next state and $a'$ is the next action.
+$$ Where $r$ is the current reward, $\gamma$ is the discount rate parameter, $s'$ is the next state and $a'$ is the next action.
 
-Fig \@ref(fig:qvalue) shows a visualization of the learned action-value function on the game Pong. Pong is a two-player game where the goal is to hit the ball past the opponent's paddle. The agent controls one of the paddles (green one) and the opponent is controlled by a simple AI. At time point 1, the ball is moving towards the paddle controlled by the agent on the right side of the screen and the q-values of all actions are around 0.7, reflecting the expected value of this state based on previous experience. At time point 2, the agent starts moving the paddle towards the ball and the value of the ‘up’ action stays high while the value of the ‘down’ action falls to −0.9. This reflects the fact that pressing ‘down’ would lead to the agent losing the ball and incurring a reward of −1 (loose the game). At time point 3, the agent hits the ball by pressing ‘up’ and the expected reward keeps increasing until time point 4, when the ball reaches the left edge of the screen and the value of all actions reflects that the agent is about to receive a reward of 1. Note, the dashed line shows the past trajectory of the ball purely for illustrative purposes (that is, not shown during the game).
+Fig \@ref(fig:qvalue) shows a visualization of the learned action-value function on the game Pong. Pong is a two-player game where the goal is to hit the ball past the opponent's paddle. The agent controls one of the paddles (green one) and the opponent is controlled by a simple AI. At time point 1, the ball is moving towards the paddle controlled by the agent on the right side of the screen and the q-values of all actions are around 0.7, reflecting the expected value of this state based on previous experience. At time point 2, the agent starts moving the paddle towards the ball and the value of the 'up' action stays high while the value of the 'down' action falls to −0.9. This reflects the fact that pressing 'down' would lead to the agent losing the ball and incurring a reward of −1 (lose the game). At time point 3, the agent hits the ball by pressing 'up', and the expected reward keeps increasing until time point 4, when the ball reaches the left edge of the screen and the value of all actions reflects that the agent is about to receive a reward of 1. Note, the dashed line shows the past trajectory of the ball purely for illustrative purposes (that is, not shown during the game).
 
 ```{r qvalue, fig.cap = "Visualization if the learned action-value function on the game Pong"}
 knitr::include_graphics("figure-qvalue.png")
 ```
 
-## Q-network: approximator of Q-value function
+## Q-network: approximation of Q-value function
 
-Achieving optimal target values: $r + \gamma \max_{a'}Q^*(s',a')$ is hard and computationally expensive, especially when the state space is large. To address this issue, we can approximate the target values using:
-$$
+Achieving optimal target values: $r + \gamma \max_{a'}Q^*(s',a')$ is hard and computationally expensive, especially when the state space is large. To address this issue, we can approximate the target values using: $$
 r + \gamma \max_{a'}Q(s',a';\theta_i^-)
 $$
 
-where $\theta_i^-$ are the parameters from some previous iteration. The Q-network are defined as a neural network approximator with weights $\theta$. The Q-network is trained to minimize the loss function:
-$$
+where $\theta_i^-$ are the parameters from some previous iteration. The Q-network are defined as a neural network approximator with weights $\theta$. The Q-network is trained to minimize the loss function: $$
 L_i(\theta_i) = \mathbb{E}_{s,a,r,s'}[(\underbrace{r + \gamma \max_{a'}Q(s',a';\theta_i^-)}_{\text{traget value}} - \underbrace{Q(s,a;\theta_i)}_{\text{estimation}})^2]
-$$
-and the gradient of the loss function can be written as:
+$$ and the gradient of the loss function can be written as:
 
 $$
 \nabla_{\theta_i}L_i(\theta_i) = \mathbb{E}_{s,a,r,s'}\left[\left(r + \gamma \max_{a'}Q(s',a';\theta_i^-) - Q(s,a;\theta_i)\right)\nabla_{\theta_i}Q(s,a;\theta_i)\right]
 $$
 
-The target value: $r + \gamma \max_{a'}Q(s',a';\theta_i^-)$ can be viewed as the reward you will get using parameters from some previous iteration, and the estimation: $Q(s,a;\theta_i)$ is the reward you will get using the current parameters. The loss function is the squared difference between the target value and the estimation. 
+The target value: $r + \gamma \max_{a'}Q(s',a';\theta_i^-)$ can be viewed as the reward you will get using parameters from some previous iteration, and the estimation: $Q(s,a;\theta_i)$ is the reward you will get using the current parameters. The loss function is the squared difference between the target value and the estimation.
 
 # Deep Reinforcement Learning
 
 The paper expand the Q-learning algorithm which described above by using a deep neural network to approximate the Q-value function with 3 new features covered below.
 
-## Convoutional network
+## Convolutional network
 
 ```{r network, fig.cap = "Visualization of the network architecture"}
 knitr::include_graphics("fig-network.png")
 ```
 
-The first new features used in the paper is the convolutional network used to process the image of the games into states which will be fed into the Q-network (shown in Fig \@ref(fig:network)). 
+The first new features used in the paper is the convolutional network used to process the image of the games into states which will be fed into the Q-network (shown in Fig \@ref(fig:network)).
 
 Before feed the images to the network, some preprocessing need to be done as the raw images of the emulator(Atari 2600), which are 210 × 160 pixel images with a 128-colour palette, is demanding in terms of computation and memory requirements. First, to encode a single frame the authors take the maximum value for each pixel colour value over the frame being encoded and the previous frame. This was necessary to remove flickering that is present in games where some objects appear only in even frames while other objects appear only in odd frames, an artefact caused by the limited number of sprites Atari 2600 can display at once. Second, authors then extract the Y channel, also known as luminance, from the RGB frame and rescale it to 84 × 84. The function ($\phi$) from algorithm 1 described below applies this preprocessing to the 4 most recent frames and stacks them to produce the input to the Q-function.
 
@@ -133,24 +139,23 @@ The second new feature is the experience replay. The experience replay is a tech
 
 The third new feature is the introduction of the target network $\hat{Q}$. The agent will use $\hat{Q}$ instead of $Q$ to generates targets $y_j = r + \gamma \max_{a'}Q(s',a';\theta_i^-)$ on each update. This will make divergence less likely to happen, as an update that increase $Q(s_t, a_t)$ often also increase $Q(s_{t+1},a) \forall a$. This implies that the target $y_j$ might be increasing as well, leading to oscillations or divergence. By seting the target being calculated by another network which no not update for a certain period, the target will be fixed for a while, and making the learning process more stable. The target network in this study is set to be a copy of the Q-network, but only updated periodically.
 
-Table: (\#tab:tab1) Comparison of the performance of the deep Q-network agent with and without experience replay and target Q-network on five Atari 2600 games. The value representing the highest average episode score. The results are taken from V Mnih et al. (2015)
+| Game           | With replay, with target Q | With replay, without target Q | Without replay, with target Q | Without replay, without target Q |
+|---------------|---------------|---------------|---------------|---------------|
+| Breakout       | 316.8                      | 240.7                         | 10.2                          | 3.2                              |
+| Enduro         | 1006.3                     | 831.4                         | 141.9                         | 29.1                             |
+| River Raid     | 7446.6                     | 4102.8                        | 2867.7                        | 1453.0                           |
+| Seaquest       | 2894.4                     | 822.6                         | 1003.0                        | 275.8                            |
+| Spqce Invaders | 1088.9                     | 826.3                         | 373.2                         | 302.0                            |
 
-| Game   | With replay, with target Q | With replay, without target Q | Without replay, with target Q | Without replay, without target Q |
-|----|-----------------------|-----------------------------|--------------------------|-----------------------|
-| Breakout    | 316.8               |240.7|10.2|3.2|
-| Enduro       | 1006.3               |831.4|141.9|29.1|
-| River Raid   | 7446.6   |4102.8|2867.7|1453.0|
-| Seaquest     | 2894.4    |822.6|1003.0|275.8
-|Spqce Invaders|          1088.9   |826.3|373.2|302.0|
+: (#tab:tab1) Comparison of the performance of the deep Q-network agent with and without experience replay and target Q-network on five Atari 2600 games. The value representing the highest average episode score. The results are taken from V Mnih et al. (2015)
 
-Table \@ref(tab:tab1) shows that the agent benefits from both experience replay and target Q-network, with the highest score achieved when both techniques are used. 
+Table \@ref(tab:tab1) shows that the agent benefits from both experience replay and target Q-network, with the highest score achieved when both techniques are used.
 
 ## Model Training
 
-The authors use RMSProp algorithm with a minibatch size of 32 to train the agent. The behaviour policy during training is $\epsilon$-greedy policy with $\epsilon$ annealed linearly from 1 to 0.1 over the first million frames and fixed at 0.1 thereafter. The agent is trained for 50 million frames, which is equivalent to 38 days of game time and use a replay memory of size one million. Both the reward and errors are clipped at [-1,1], and actions are only selected on every fourth frame and repeated for the next three frames. Which is less expensive to run and have little effect on the performance as the fastest humane player can only react every 6th frame. Hyperparameters are selected by 'informal search' (not e.g. grid search).
+The authors use RMSProp algorithm with a mini-batch size of 32 to train the agent. The behaviour policy during training is $\epsilon$-greedy policy with $\epsilon$ annealed linearly from 1 to 0.1 over the first million frames and fixed at 0.1 thereafter. The agent is trained for 50 million frames, which is equivalent to 38 days of game time and use a replay memory of size one million. Both the reward and errors are clipped at [-1,1], and actions are only selected on every fourth frame and repeated for the next three frames. This is less expensive to run and has little effect on the performance as the fastest humane player can only react every 6th frame. Hyperparameters are selected by 'informal search' (not e.g. grid search).
 
 ## Algorithm
-
 
 # References
 
