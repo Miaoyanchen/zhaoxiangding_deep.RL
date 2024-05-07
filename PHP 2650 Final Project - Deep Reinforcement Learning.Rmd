@@ -131,9 +131,26 @@ The second new feature is the experience replay. The experience replay is a tech
 
 ## Second target network $\widehat{Q}$
 
-The third new feature is the introduction of the target network $\hat{Q}$. The agent will use $\hat{Q}$ instead of $Q$ to generates targets $y_j = r + \gamma \max_{a'}Q(s',a';\theta_i^-)$ on each update.
+The third new feature is the introduction of the target network $\hat{Q}$. The agent will use $\hat{Q}$ instead of $Q$ to generates targets $y_j = r + \gamma \max_{a'}Q(s',a';\theta_i^-)$ on each update. This will make divergence less likely to happen, as an update that increase $Q(s_t, a_t)$ often also increase $Q(s_{t+1},a) \forall a$. This implies that the target $y_j$ might be increasing as well, leading to oscillations or divergence. By seting the target being calculated by another network which no not update for a certain period, the target will be fixed for a while, and making the learning process more stable. The target network in this study is set to be a copy of the Q-network, but only updated periodically.
 
-The target network is a copy of the Q-network that is used to compute the target values. The target network is updated less frequently than the Q-network and is used to compute the target values for the loss function. The target network is updated by copying the weights of the Q-network every $C$ steps. This technique is used to stabilize the learning process and prevent the target values from oscillating. The target network is used to compute the target values for the loss function, and the Q-network is used to compute the estimation values. The target values are computed using the target network and the estimation values are computed using the Q-network.
+Table: (\#tab:tab1) Comparison of the performance of the deep Q-network agent with and without experience replay and target Q-network on five Atari 2600 games. The value representing the highest average episode score. The results are taken from V Mnih et al. (2015)
+
+| Game   | With replay, with target Q | With replay, without target Q | Without replay, with target Q | Without replay, without target Q |
+|----|-----------------------|-----------------------------|--------------------------|-----------------------|
+| Breakout    | 316.8               |240.7|10.2|3.2|
+| Enduro       | 1006.3               |831.4|141.9|29.1|
+| River Raid   | 7446.6   |4102.8|2867.7|1453.0|
+| Seaquest     | 2894.4    |822.6|1003.0|275.8
+|Spqce Invaders|          1088.9   |826.3|373.2|302.0|
+
+Table \@ref(tab:tab1) shows that the agent benefits from both experience replay and target Q-network, with the highest score achieved when both techniques are used. 
+
+## Model Training
+
+The authors use RMSProp algorithm with a minibatch size of 32 to train the agent. The behaviour policy during training is $\epsilon$-greedy policy with $\epsilon$ annealed linearly from 1 to 0.1 over the first million frames and fixed at 0.1 thereafter. The agent is trained for 50 million frames, which is equivalent to 38 days of game time and use a replay memory of size one million. Both the reward and errors are clipped at [-1,1], and actions are only selected on every fourth frame and repeated for the next three frames. Which is less expensive to run and have little effect on the performance as the fastest humane player can only react every 6th frame. Hyperparameters are selected by 'informal search' (not e.g. grid search).
+
+## Algorithm
+
 
 # References
 
