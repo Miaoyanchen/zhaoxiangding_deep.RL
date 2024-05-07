@@ -43,7 +43,7 @@ Whether we are engaging in a daily conversation or driving a vehicle, essentiall
 
 The idea of reinforcement learning is further extended to *deep reinforcement learning* that handles more sophisticated tasks. Deep reinforcement learning allows the agent to perforAm on real-world complexity in higher dimensions by combining reinforcement learning with a class of deep neural networks. A novel artificial agent, deep Q-network agent was recently introduced by Mnih et al. (2015). The authors implemented Q-learning with conventional neural networks, and evaluated their DQN agent with Atari 2600 and other game platforms. We will describe the mathematical concepts and learning process in the sections below to give a comprehensive introduction of deep reinforcement learning.
 
-We will begin by introducing the fundamentals of reinforcement learning known as Q-learning, then dive into the deep learning deviation of the Q-learning algorithm, namely deep Q learning.
+We will begin by introducing the fundamentals of reinforcement learning known as Q-learning, then dive into the deep learning deviation of the Q-learning algorithm, namely deep Q learning [@Mnih2015].
 
 # Summary of Notations
 
@@ -67,7 +67,7 @@ We will begin by introducing the fundamentals of reinforcement learning known as
 
 ## Q-learning Algorithm
 
-A reinforcement learning environment follows a large finite **Markov decision process** (MDP). In reinforcement learning, MDP is a stochastic decision process that is comprised of 4 tuples: finite set of states, finite set of actions, state transition function, and reward function. In the MDP model, Markov property also holds, in which the next state and the expected reward at $t+1$ only depends on the state at time $t$ and action at time $t$ and not on any other prior events [@Kaelbling1998]. A policy is a behavior of an agent at a given time, which mathematically takes the state as an input and returns action as output: $\pi(s) \rightarrow a$. The goal of the agent is to select actions from a set of actions $\{a_1,\cdots,a_k\}$ in a way that maximizes the future reward. There's a standard assumption in Q-learning that assumes the future rewards are discounted by a factor $\gamma$ per time step, and defines the future discounted return at time $t$ as:
+A reinforcement learning environment follows a large finite **Markov decision process** (MDP). In reinforcement learning, MDP is a stochastic decision process that is comprised of 4 tuples: finite set of states, finite set of actions, state transition function, and reward function. In the MDP model, Markov property also holds, in which the next state and the expected reward at $t+1$ only depends on the state at time $t$ and action at time $t$ and not on any other prior events [@Kaelbling1998]. A policy is a behavior of an agent at a given time, which mathematically takes the state as an input and returns action as output: $\pi(s) \rightarrow a$. The goal of the agent is to select actions from a set of actions $\{a_1,\cdots,a_k\}$ in a way that maximizes the future reward. There's a standard assumption in Q-learning that assumes the future rewards are discounted by a factor $\gamma$ (default set to 0.99) per time step. Therefore, the future discounted return at time $t$ is defined as:
 
 $$
 R_t = \sum^T_{t' = t} \gamma^{t-t'}r_{t'}
@@ -99,13 +99,19 @@ knitr::include_graphics("figure-qvalue.png")
 
 ## Q-network: approximation of Q-value function
 
-Achieving optimal target values: $r + \gamma \max_{a'}Q^*(s',a')$ is hard and computationally expensive, especially when the state space is large. To address this issue, we can approximate the target values using: $$
+Achieving optimal target values: $r + \gamma \max_{a'}Q^*(s',a')$ is hard and computationally expensive, especially when the state space is large. To address this issue, we can approximate the target values using: 
+
+$$
 r + \gamma \max_{a'}Q(s',a';\theta_i^-)
 $$
 
-where $\theta_i^-$ are the parameters from some previous iteration. The Q-network are defined as a neural network approximator with weights $\theta$. The Q-network is trained to minimize the loss function: $$
-L_i(\theta_i) = \mathbb{E}_{s,a,r,s'}[(\underbrace{r + \gamma \max_{a'}Q(s',a';\theta_i^-)}_{\text{traget value}} - \underbrace{Q(s,a;\theta_i)}_{\text{estimation}})^2]
-$$ and the gradient of the loss function can be written as:
+where $\theta_i^-$ are the parameters from some previous iteration. The Q-network are defined as a neural network approximator with weights $\theta$. The Q-network is trained to minimize the loss function: 
+
+$$
+L_i(\theta_i) = \mathbb{E}_{s,a,r,s'}[(\underbrace{r + \gamma \max_{a'}Q(s',a';\theta_i^-)}_{\text{target value}} - \underbrace{Q(s,a;\theta_i)}_{\text{estimation}})^2]
+$$ 
+
+and the gradient of the loss function can be written as:
 
 $$
 \nabla_{\theta_i}L_i(\theta_i) = \mathbb{E}_{s,a,r,s'}\left[\left(r + \gamma \max_{a'}Q(s',a';\theta_i^-) - Q(s,a;\theta_i)\right)\nabla_{\theta_i}Q(s,a;\theta_i)\right]
