@@ -1,7 +1,7 @@
 ---
 title: "A Comprehensive Introduction to Deep Reinforcement Learning"
 author: "Miaoyan Chen and Zhaoxiang Ding"
-date: "`r Sys.Date()`"
+date: "2024-05-07"
 output:
   bookdown::html_document2:
     toc: true
@@ -17,15 +17,7 @@ output:
 bibliography: deepRL.references.bib
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-knitr::opts_chunk$set(message = F)
-knitr::opts_chunk$set(warning = F)
-knitr::opts_chunk$set(fig.height = 4)
-knitr::opts_chunk$set(fig.width = 6)
-knitr::opts_chunk$set(eval = T)
-knitr::opts_chunk$set(fig.align="center")
-```
+
 
 ## Table of Contents
 
@@ -80,9 +72,10 @@ Where $r$ is the current reward, $\gamma$ is the discount rate parameter, $s'$ i
 
 Fig \@ref(fig:qvalue) shows a visualization of the learned action-value function on the game Pong. Pong is a two-player game where the goal is to hit the ball past the opponent's paddle. The agent controls one of the paddles (green one) and the opponent is controlled by a simple AI. At time point 1, the ball is moving towards the paddle controlled by the agent on the right side of the screen and the q-values of all actions are around 0.7, reflecting the expected value of this state based on previous experience. At time point 2, the agent starts moving the paddle towards the ball and the value of the ‘up’ action stays high while the value of the ‘down’ action falls to −0.9. This reflects the fact that pressing ‘down’ would lead to the agent losing the ball and incurring a reward of −1 (loose the game). At time point 3, the agent hits the ball by pressing ‘up’ and the expected reward keeps increasing until time point 4, when the ball reaches the left edge of the screen and the value of all actions reflects that the agent is about to receive a reward of 1. Note, the dashed line shows the past trajectory of the ball purely for illustrative purposes (that is, not shown during the game).
 
-```{r qvalue, fig.cap = "Visualization if the learned action-value function on the game Pong"}
-knitr::include_graphics("figure-qvalue.png")
-```
+<div class="figure" style="text-align: center">
+<img src="figure-qvalue.png" alt="Visualization if the learned action-value function on the game Pong" width="2598" />
+<p class="caption">(\#fig:qvalue)Visualization if the learned action-value function on the game Pong</p>
+</div>
 
 ## Q-network: approximator of Q-value function
 
