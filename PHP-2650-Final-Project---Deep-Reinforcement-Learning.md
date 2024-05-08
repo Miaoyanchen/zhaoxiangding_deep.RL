@@ -1,7 +1,10 @@
 ---
 title: "A Comprehensive Introduction to Deep Reinforcement Learning"
 author: "Miaoyan Chen and Zhaoxiang Ding"
-date: "2024-05-07"
+date: "2024-05-08"
+header-includes:
+   - \usepackage{algorithm}
+   - \usepackage{algpseudocode}
 output:
   bookdown::html_document2:
     toc: true
@@ -45,7 +48,6 @@ We will begin by introducing the fundamentals of reinforcement learning known as
 | $a$        | action                                                      |
 | $t$        | discrete time step                                          |
 | $\pi$      | policy, decision rule                                       |
-|            |                                                             |
 |            |                                                             |
 | $s_t$      | state at time $t$                                           |
 | $a_t$      | game actions selected from a set of actions                 |
@@ -117,7 +119,7 @@ The target value: $r + \gamma \max_{a'}Q(s',a';\theta_i^-)$ can be viewed as the
 
 The paper expand the Q-learning algorithm which described above by using a deep neural network to approximate the Q-value function with 3 new features covered below.
 
-## Convolutional network
+## Convolutional network {#network}
 
 <div class="figure" style="text-align: center">
 <img src="fig-network.png" alt="Visualization of the network architecture" width="720" />
@@ -159,9 +161,34 @@ Table \@ref(tab:tab1) shows that the agent benefits from both experience replay 
 
 ## Model Training
 
-The authors use RMSProp algorithm with a mini-batch size of 32 to train the agent. The behaviour policy during training is $\epsilon$-greedy policy with $\epsilon$ annealed linearly from 1 to 0.1 over the first million frames and fixed at 0.1 thereafter. The agent is trained for 50 million frames, which is equivalent to 38 days of game time and use a replay memory of size one million. Both the reward and errors are clipped at [-1,1], and actions are only selected on every fourth frame and repeated for the next three frames. This is less expensive to run and has little effect on the performance as the fastest humane player can only react every 6th frame. Hyperparameters are selected by 'informal search' (not e.g. grid search).
+The authors use RMSProp algorithm with a mini-batch size of 32 to train the agent. The behaviour policy during training is $\epsilon$-greedy policy with $\epsilon$ annealed linearly from 1 to 0.1 over the first million frames and fixed at 0.1 thereafter. The agent is trained for 50 million frames, which is equivalent to 38 days of game time and use a replay memory of size one million. Both the reward and errors ($r + \gamma \max_{a'}Q(s',a';\theta_i^-) - Q(s,a;\theta_i)$) are clipped at [-1,1], and actions are only selected on every fourth frame and repeated for the next three frames. This is less expensive to run and has little effect on the performance as the fastest humane player can only react every 6th frame. Hyperparameters are selected by 'informal search' (not e.g. grid search).
 
 ## Algorithm
+
+**Deep Q-learning with experience replay**.    
+
+| Initialize replay memory $D$ to capacity $N$;      
+| Initialize action-value function $Q$ with random weights $\theta$;     
+| Initialize target action-value function $\hat{Q}$ with weights $\theta^- = \theta$;     
+| **FOR** episode = 1, $M$ **DO**.     
+|     Initialize sequence $s_1 = \{x_1\}$ and preprocessed sequenced $\phi_1 = \phi(s_1)$;     
+|     **FOR** $t = 1, T$ **DO**.    
+|         With probability $\epsilon$ select a random action $a_t$;     
+|         otherwise select $a_t = \max_a Q(\phi(s_t), a; \theta)$;     
+|         Execute action $a_t$ in emulator and observe reward $r_t$ and image $x_{t+1}$;     
+|         Set $s_{t+1} = s_t, a_t, x_{t+1}$ and preprocess $\phi_{t+1} = \phi(s_{t+1})$;      
+|         Store transition $(\phi_t, a_t, r_t, \phi_{t+1})$ in $D$;       
+|         Sample random minibatch of transitions $(\phi_j, a_j, r_j, \phi_{j+1})$ from $D$;       
+|         Set $y_j = \begin{cases} r_j & \text{for terminal } \phi_{j+1} \\ r_j + \gamma \max_{a'} \hat{Q}(\phi_{j+1}, a'; \theta^-) & \text{for non-terminal } \phi_{j+1} \end{cases}$;      
+|         Perform a gradient descent step on $(y_j - Q(\phi_j, a_j; \theta))^2$ with respect to the network parameters $\theta$;      
+|         Every $C$ steps reset $\hat{Q} = Q$;     
+|     **END FOR**.    
+| **END FOR**.    
+
+The above algorithm is describe in the paper by Mnih et al. (2015) and is used to train the deep Q-network agent. episode is defined as an entire gameplay. The greedy parameter $\epsilon$ allows the agent to explore the environment by selecting a random action with probability $\epsilon$ and selecting the action with the highest Q-value with probability $1-\epsilon$. $\phi$ is the preprocessing function described above in \@ref(network). The target value $y_j$ is calculated as $r_j$ if the next state is terminal(end of the game), and $r_j + \gamma \max_{a'} \hat{Q}(\phi_{j+1}, a'; \theta^-)$ if the next state is non-terminal. The target network $\hat{Q}$ is updated every $C = 10000$ steps to be the same as the Q-network $Q$. 
+
+## Results
+
 
 # References
 
