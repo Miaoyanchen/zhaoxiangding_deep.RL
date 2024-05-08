@@ -30,16 +30,6 @@ knitr::opts_chunk$set(eval = T)
 knitr::opts_chunk$set(fig.align="center")
 ```
 
-## Table of Contents
-
-1.  Preamble
-
-2.  Summary of Notations
-
-3.  Reinforcement Learning
-
-4.  Deep Reinforcement Learning
-
 # Preamble
 
 Whether we are engaging in a daily conversation or driving a vehicle, essentially we are picking up on our surrounding environment and making a response simultaneously to the changes in the environment. That is, we are learning from our interaction with the environment and executing an action in return. This is the foundation idea that lies in all learning and intelligence [@sutton2018]. A machine learning technique to train software to make decision to achieve the optimal result by performing a sequence of actions in an environment is known as *reinforcement learning* [citation]. A reinforcement learning environment is formalized by an optimal control of Markov decision processes, which can be decompose into three essential parts - sensation, action, and goal [@sutton2018]. A learning agent should be able to sense the state of the environment, and takes series of actions that effects the state and achieve a goal overtime.
@@ -70,7 +60,7 @@ We will begin by introducing the fundamentals of reinforcement learning known as
 
 ## Q-learning Algorithm
 
-A reinforcement learning environment follows a large finite **Markov decision process** (MDP). In reinforcement learning, MDP is a stochastic decision process that is comprised of 4 tuples: finite set of states, finite set of actions, state transition function, and reward function. In the MDP model, Markov property also holds, in which the next state and the expected reward at $t+1$ only depends on the state at time $t$ and action at time $t$ and not on any other prior events [@Kaelbling1998]. A policy is a behavior of an agent at a given time, which mathematically takes the state as an input and returns action as output: $\pi(s) \rightarrow a$. The goal of the agent is to select actions from a set of actions $\{a_1,\cdots,a_k\}$ in a way that maximizes the future reward. There's a standard assumption in Q-learning that assumes the future rewards are discounted by a factor $\gamma$ (default set to 0.99) per time step. Therefore, the future discounted return at time $t$ is defined as:
+A reinforcement learning environment follows a large finite **Markov decision process** (MDP). In reinforcement learning, MDP is a stochastic decision process that is comprised of 4 tuples: finite set of states, finite set of actions, state transition function, and reward function. In the MDP model, Markov property also holds, in which the next state and the expected reward at $t+1$ only depends on the state at time $t$ and action at time $t$ and not on any other prior events [@Kaelbling1998]. A policy is a behavior of an agent at a given time, which mathematically takes the state as an input and returns action as output: $\pi(s) \rightarrow a$. The goal of the agent is to select actions from a set of actions $\{a_1,\cdots,a_k\}$ in a way that maximizes not only the current reward, but also the future reward. There's a standard assumption in Q-learning that assumes the future rewards are discounted by a factor $\gamma$ (default set to 0.99) per time step. Therefore, the future discounted return at time $t$ is defined as:
 
 $$
 R_t = \sum^T_{t' = t} \gamma^{t-t'}r_{t'}
@@ -78,13 +68,15 @@ $$
 
 where T is the final time step, $r_{t'}$ is the reward at time $t'$, and the term $\gamma^{t-t'}$ diminishes as we increase in time.
 
-In order to teach the agent to achieve the maximum reward, and tie the reward to the actions, we can define the **Optimal action-value function**:
+In order to teach the agent to achieve the maximum reward, and tie the reward to the actions, we can define the **Optimal action-value function** as the maximum expected return achieved by following some policy, after the agent seeing some sequence of states $s$ and then taking some action $a$:
 
 $$
 Q^*(s,a) = \max_{\pi} \mathbb{E}[R_t | s_t = s, a_t = a, \pi]
 $$
 
-Where, $\pi$ is the policy to guide the action, $s$ is the current state, $a$ is the current action, and $R_t$ is the total reward at time $t$.
+Where, $\pi$ is the policy to guide the action, $s$ is the observed states, $a$ is the current action, and $R_t$ is the total reward at time $t$.
+
+In our case (learning how to play a game in Atari 2600), $s$ can also be viewed as current states (screen shots of the game), because the consequence of previous actions and states are all reflected in the current state. The agent can make the best decision by just observing the current state and taking the action that maximize the expected return.
 
 This function obey *Bellman equation*, which is based on the following intuition: the expected return for taking the optimal action from a given state is the sum of the immediate reward from the current state to the next state, and the expected return from the next state to the goal state. Following this equation, The optimal action-value function can be expressed as:
 
