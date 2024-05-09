@@ -203,6 +203,18 @@ The authors further evaluate the agent in all 49 games in the Atari 2600 platfor
 knitr::include_graphics("figure-mont.png")
 ```
 
+This video demonstrates how an agent is showing improvement over training episodes and is able to pick up the optimal strategy in hitting the bricks to gain higher score in the game. 
+
+```{r, fig.cap= "DQN training for playing Atari's Breakout game"}
+# Embedding video using package from https://ijlyttle.github.io/vembedr/
+library("vembedr")
+embed_url("https://youtu.be/TmPfTpjtdgg")  %>%
+  use_align("center")
+```
+
+
+
+
 # References
 
 ::: {#refs}

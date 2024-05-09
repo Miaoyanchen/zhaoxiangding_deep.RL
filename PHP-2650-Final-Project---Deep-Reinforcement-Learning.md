@@ -200,6 +200,20 @@ The authors further evaluate the agent in all 49 games in the Atari 2600 platfor
 <p class="caption">(\#fig:mont)Screenshot of the game Montezuma's Revenge</p>
 </div>
 
+This video demonstrates how an agent is showing improvement over training episodes and is able to pick up the optimal strategy in hitting the bricks to gain higher score in the game. 
+
+
+```{=html}
+<div class="vembedr" align="center">
+<div>
+<iframe src="https://www.youtube.com/embed/TmPfTpjtdgg" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
+```
+
+
+
+
 # References
 
 ::: {#refs}
