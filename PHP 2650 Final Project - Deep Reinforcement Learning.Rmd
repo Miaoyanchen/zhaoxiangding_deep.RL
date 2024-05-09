@@ -57,6 +57,9 @@ We will begin by introducing the fundamentals of reinforcement learning known as
 | $R_t$      | total reward at time t, dependent                           |
 
 # Reinforcement Learning
+```{r fig.cap="Visualization of Reinforcement Learning", fig.height=3, fig.width=5}
+knitr::include_graphics("diagram.png")
+```
 
 ## Q-learning Algorithm
 
@@ -100,7 +103,7 @@ $$
 r + \gamma \max_{a'}Q(s',a';\theta_i^-)
 $$
 
-where $\theta_i^-$ are the parameters from some previous iteration. The Q-network are defined as a neural network approximator with weights $\theta$. The Q-network is trained to minimize the loss function: 
+where $\theta_i^-$ are the parameters from some previous iteration. The Q-network are defined as a neural network approximator with weights $\theta$. The Q-network is trained to minimize the mean square error in the loss function: 
 
 $$
 L_i(\theta_i) = \mathbb{E}_{s,a,r,s'}[(\underbrace{r + \gamma \max_{a'}Q(s',a';\theta_i^-)}_{\text{target value}} - \underbrace{Q(s,a;\theta_i)}_{\text{estimation}})^2]
@@ -150,7 +153,7 @@ The third new feature is the introduction of the target network $\hat{Q}$. The a
 | Enduro         | 1006.3                     | 831.4                         | 141.9                         | 29.1                             |
 | River Raid     | 7446.6                     | 4102.8                        | 2867.7                        | 1453.0                           |
 | Seaquest       | 2894.4                     | 822.6                         | 1003.0                        | 275.8                            |
-| Spqce Invaders | 1088.9                     | 826.3                         | 373.2                         | 302.0                            |
+| Space Invaders | 1088.9                     | 826.3                         | 373.2                         | 302.0                            |
 
 : (#tab:tab1) Comparison of the performance of the deep Q-network agent with and without experience replay and target Q-network on five Atari 2600 games. The value representing the highest average episode score. The results are taken from Mnih et al. (2015)
 
@@ -211,6 +214,15 @@ library("vembedr")
 embed_url("https://youtu.be/TmPfTpjtdgg")  %>%
   use_align("center")
 ```
+
+## Summary
+-   Deep reinforcement learning is adapted from reinforcement learning, with abilities to learn more complex policies from high dimensional sensory input
+-   The goal is to maximize the cumulative future reward
+-   Implement convolutional neural network as an approximator for the target values 
+-   Perform experience replay to remove correlations and stores the agent's experiences in a replay memory
+-   Minimize the mean square error between Q-network and Q-learning target
+-   The algorithm uses stochastic gradient descent to update the weights
+-   The DQN was tested on 49 Atari 2600 games, and it outperforms other reinforcement learning algorithms
 
 
 # References
