@@ -118,7 +118,7 @@ The paper by Mnih et al. (2015) expands the Q-learning algorithm which described
 ## Convolutional network {#network}
 
 <div class="figure" style="text-align: center">
-<img src="fig-network.png" alt="Visualization of the network architecture" width="720" />
+<img src="fig-network.png" alt="Visualization of the network architecture" width="960" />
 <p class="caption">(\#fig:network)Visualization of the network architecture</p>
 </div>
 
@@ -140,7 +140,7 @@ Before feeding the images to the network, some pre-processing need to be done as
 After image preprocessing, an 84 × 84 × 4 image will be used to train the network. The first hidden layer convolves 32 filters of 8 × 8 with stride 4 with the input image and applies a rectifier nonlinearity. The second hidden layer convolves 64 filters of 4 × 4 with stride 2, again followed by a rectifier nonlinearity. This is followed by a third convolutional layer that convolves 64 filters of 3 × 3 with stride 1 followed by a rectifier. The final hidden layer is fully-connected and consists of 512 rectifier units. The output layer is a fully-connected linear layer with a single output for each valid action (Q-value).
 
 <div class="figure" style="text-align: center">
-<img src="figure-tsne.png" alt="Two-dimensional t-SNE visualization of the representations in the last hidden layer assigned by the network to game states experienced while playing Space Invaders" width="720" />
+<img src="figure-tsne.png" alt="Two-dimensional t-SNE visualization of the representations in the last hidden layer assigned by the network to game states experienced while playing Space Invaders" width="1280" />
 <p class="caption">(\#fig:tsne)Two-dimensional t-SNE visualization of the representations in the last hidden layer assigned by the network to game states experienced while playing Space Invaders</p>
 </div>
 
@@ -197,14 +197,14 @@ The above algorithm is describe in the paper by Mnih et al. (2015) and is used t
 ## Results and evaluation
 
 <div class="figure" style="text-align: center">
-<img src="figure-traincurve.png" alt="Traning curves tracking the agent's average score and average predicted action value" width="720" />
+<img src="figure-traincurve.png" alt="Traning curves tracking the agent's average score and average predicted action value" width="960" />
 <p class="caption">(\#fig:traincurve)Traning curves tracking the agent's average score and average predicted action value</p>
 </div>
 
 Fig \@ref(fig:traincurve) shows the agent's average score and average predicted action value over the course of training. The agent's average score increases over time as the agent learns to play the game better. The average predicted action value also increases over time, indicating that the agent is learning to predict the value of actions more accurately. In easier games, the agent learns to play the game well quickly, and the scores are more stable, while in harder games, the agent takes longer to learn to play the game well and the results are more variable.
 
 <div class="figure" style="text-align: center">
-<img src="figure-evaluation.png" alt="Comparison of the DQN agent with the best reinforcement learning methods in the literature" width="720" />
+<img src="figure-evaluation.png" alt="Comparison of the DQN agent with the best reinforcement learning methods in the literature" width="1707" />
 <p class="caption">(\#fig:evaluation)Comparison of the DQN agent with the best reinforcement learning methods in the literature</p>
 </div>
 
