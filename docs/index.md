@@ -22,6 +22,12 @@ bibliography: deepRL.references.bib
 
 
 
+# Paper
+-   **Title**: "Human-level control through deep reinforcement learning"
+-   **Authors**: Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Andrei A. Rusu, Joel Veness, Marc G. Bellemare, Alex Graves, Martin Riedmiller, Andreas K. Fidjeland, Georg Ostrovski, Stig Petersen, Charles Beattie, Amir Sadik, Ioannis Antonoglou, Helen King, Dharshan Kumaran, Daan Wierstra, Shane Legg & Demis Hassabis 
+-   **Link**: https://www.nature.com/articles/nature14236#citeas
+-   **Published**: 25 February 2015
+
 # Preamble
 
 Whether we are engaging in a daily conversation or driving a vehicle, essentially we are picking up on our surrounding environment and making a response simultaneously to the changes in the environment. That is, we are learning from our interaction with the environment and executing an action in return. This is the foundation idea that lies in all learning and intelligence [@sutton2018]. A machine learning technique to train software to make decision to achieve the optimal result by performing a sequence of actions in an environment is known as *reinforcement learning* [@sutton2018]. A reinforcement learning environment is formalized by an optimal control of Markov decision processes, which can be decompose into three essential parts - sensation, action, and goal [@sutton2018]. A learning agent should be able to sense the state of the environment, and takes series of actions that effects the state and achieve a goal overtime.
@@ -184,7 +190,7 @@ The authors use RMSProp algorithm (Root Mean Square Propagation, is an optimizat
 **Deep Q-learning with experience replay**.    
 <img src="figure-algorithm.png" width="1778" style="display: block; margin: auto;" />
 
-The above algorithm is describe in the paper by Mnih et al. (2015) and is used to train the deep Q-network agent. episode is defined as an entire gameplay. The greedy parameter $\epsilon$ allows the agent to explore the environment by selecting a random action with probability $\epsilon$ and selecting the action with the highest Q-value with probability $1-\epsilon$. $\phi$ is the preprocessing function described above in \@ref(network). The target value $y_j$ is calculated as $r_j$ if the next state is terminal(end of the game), and $r_j + \gamma \max_{a'} \hat{Q}(\phi_{j+1}, a'; \theta^-)$ if the next state is non-terminal. The target network $\hat{Q}$ is updated every $C = 10000$ steps to be the same as the Q-network $Q$. 
+The above algorithm is describe in the paper by Mnih et al. (2015) and is used to train the deep Q-network agent. Episode is defined as an entire gameplay. The greedy parameter $\epsilon$ allows the agent to explore the environment by selecting a random action with probability $\epsilon$ and selecting the action with the highest Q-value with probability $1-\epsilon$. $\phi$ is the preprocessing function described above in \@ref(network). The target value $y_j$ is calculated as $r_j$ if the next state is terminal(end of the game), and $r_j + \gamma \max_{a'} \hat{Q}(\phi_{j+1}, a'; \theta^-)$ if the next state is non-terminal. The target network $\hat{Q}$ is updated every $C = 10000$ steps to be the same as the Q-network $Q$. 
 
 ## Results and evaluation
 
@@ -200,7 +206,7 @@ Fig \@ref(fig:traincurve) shows the agent's average score and average predicted 
 <p class="caption">(\#fig:evaluation)Comparison of the DQN agent with the best reinforcement learning methods in the literature</p>
 </div>
 
-The authors further evaluate the agent in all 49 games in the Atari 2600 platform and compare the results with the best reinforcement learning methods in the literature. Fig \@ref(fig:evaluation) shows the comparison of the deep Q-network agent with the best reinforcement learning methods in the literature. The deep Q-network agent outperforms the best reinforcement learning methods in the literature in the majority of the games, and outperform professional human game testers in more than half of the games. It is worth to notice that the best performance games are those easier to play and easier for the agent to learn (e.g: Boxing, Breakout, Star gunner, Pinball, etc.). These games' strategies can be summarized as opening a 'hole' (shown in video), which is easier for the agent to learn. And the reward in clear and immediate as well. But for games that is difficult to play, or the reward is vague and may take a long time to achieve, the agent may not perform well. Montezuma's Revenge is one of the hardest games in the Atari 2600 platform, which require the player to control the character to explore the maze and collect the keys to open the doors (showed in Fig \@ref(fig:mont) [@image]). The reward will only be given when the player reach the end of the maze and open the door. The evaluation shows that the agent is basically play the game randomly (0% performance) and did not learn the strategy to play the game.
+The authors further evaluate the agent in all 49 games in the Atari 2600 platform and compare the results with the best reinforcement learning methods in the literature. Fig \@ref(fig:evaluation) summarizes the results of the comparison. The deep Q-network agent outperforms the best reinforcement learning methods and professional human game testers in majority of the games. It is worth to notice that the best performance games are those that are easier to play and easier for the agent to learn (e.g: Boxing, Breakout, Star gunner, Pinball, etc.). These games are short-horizon games, and the ultimate game strategy is to gain more points in the game. However, for long-horizon games that doesn't give immediate reward and with a longer time to achieve a goal, the agent may not perform well in these cases. Montezuma's Revenge is one of the hardest games in the Atari 2600 platform, which require the player to control the character to explore the maze and collect the keys to open the doors (showed in Fig \@ref(fig:mont) [@image]). The reward will only be given when the player reach the end of the maze and open the door. The evaluation shows that the agent is basically play the game randomly (0% performance) and did not learn the strategy to play the game.
 
 <div class="figure" style="text-align: center">
 <img src="figure-mont.png" alt="Screenshot of the game Montezuma's Revenge" width="349" />
@@ -224,7 +230,7 @@ This video [@youtube] demonstrates how an agent is showing improvement over trai
 -   DQN implements convolutional neural network as an approximator for the target values 
 -   Perform experience replay to remove correlations and stores the agent's experiences in a replay memory
 -   Minimize the mean square error between Q-network and Q-learning target
--   The algorithm uses stochastic gradient descent to update the weights
+-   The algorithm uses RMSProp with stochastic gradient descent to update the weights
 -   The DQN was tested on 49 Atari 2600 games, and it outperforms other reinforcement learning algorithms
 
 
