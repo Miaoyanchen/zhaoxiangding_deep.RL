@@ -183,25 +183,9 @@ The authors use RMSProp algorithm (Root Mean Square Propagation, is an optimizat
 ## Algorithm
 
 **Deep Q-learning with experience replay**.    
-```{algorithm, caption = "Deep Q-learning with experience replay"}
+```{r algorithm, fig.cap = ""}
+knitr::include_graphics("figure-algorithm.png")
 ```
-| Initialize replay memory $D$ to capacity $N$;      
-| Initialize action-value function $Q$ with random weights $\theta$;     
-| Initialize target action-value function $\hat{Q}$ with weights $\theta^- = \theta$;     
-| **FOR** episode = 1, $M$ **DO**.     
-|     Initialize sequence $s_1 = \{x_1\}$ and preprocessed sequenced $\phi_1 = \phi(s_1)$;     
-|     **FOR** $t = 1, T$ **DO**.    
-|         With probability $\epsilon$ select a random action $a_t$;     
-|         otherwise select $a_t = \max_a Q(\phi(s_t), a; \theta)$;     
-|         Execute action $a_t$ in emulator and observe reward $r_t$ and image $x_{t+1}$;     
-|         Set $s_{t+1} = s_t, a_t, x_{t+1}$ and preprocess $\phi_{t+1} = \phi(s_{t+1})$;      
-|         Store transition $(\phi_t, a_t, r_t, \phi_{t+1})$ in $D$;       
-|         Sample random minibatch of transitions $(\phi_j, a_j, r_j, \phi_{j+1})$ from $D$;       
-|         Set $y_j = \begin{cases} r_j & \text{for terminal } \phi_{j+1} \\ r_j + \gamma \max_{a'} \hat{Q}(\phi_{j+1}, a'; \theta^-) & \text{for non-terminal } \phi_{j+1} \end{cases}$;      
-|         Perform a gradient descent step on $(y_j - Q(\phi_j, a_j; \theta))^2$ with respect to the network parameters $\theta$;      
-|         Every $C$ steps reset $\hat{Q} = Q$;     
-|     **END FOR**.    
-| **END FOR**.    
 
 The above algorithm is describe in the paper by Mnih et al. (2015) and is used to train the deep Q-network agent. episode is defined as an entire gameplay. The greedy parameter $\epsilon$ allows the agent to explore the environment by selecting a random action with probability $\epsilon$ and selecting the action with the highest Q-value with probability $1-\epsilon$. $\phi$ is the preprocessing function described above in \@ref(network). The target value $y_j$ is calculated as $r_j$ if the next state is terminal(end of the game), and $r_j + \gamma \max_{a'} \hat{Q}(\phi_{j+1}, a'; \theta^-)$ if the next state is non-terminal. The target network $\hat{Q}$ is updated every $C = 10000$ steps to be the same as the Q-network $Q$. 
 
