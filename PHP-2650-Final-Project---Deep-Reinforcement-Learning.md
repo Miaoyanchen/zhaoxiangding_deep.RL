@@ -1,7 +1,7 @@
 ---
 title: "A Comprehensive Introduction to Deep Reinforcement Learning"
 author: "Miaoyan Chen and Zhaoxiang Ding"
-date: "2024-05-09"
+date: "2024-05-10"
 header-includes:
    - \usepackage{algorithm}
    - \usepackage{algpseudocode}
@@ -54,14 +54,14 @@ We will begin by introducing the fundamentals of reinforcement learning known as
 <p class="caption">(\#fig:unnamed-chunk-1)Visualization of Reinforcement Learning</p>
 </div>
 
-Same as nerual network, reinforcement learning is also a way to let the computer behaves like human being. The computer will learn from the environment and make decision based on the learning. The diagram above shows the basic structure of reinforcement learning. The agent (the computer) interacts with the environment by taking actions and receiving rewards. The agent observes the state of the environment and selects an action based on the state. The environment then transitions to a new state and the agent receives a reward. The agent uses the reward to update its policy and selects a new action. This process continues until the agent reaches the goal state. The goal of the agent is to maximize the cumulative reward over time.
+Reinforcement learning is a way that allow computers to behave like human being. The computer will learn from the environment and make decision based on the learning. The diagram above shows the basic structure of reinforcement learning. The agent (the computer) interacts with the environment by taking actions and receiving rewards. The agent observes the state of the environment and selects an action based on the state. The environment then transitions to a new state and the agent receives a reward. The agent uses the reward to update its policy and selects a new action. This process continues until the agent reaches its goal. The goal of the agent is to maximize the cumulative reward over time.
 
 <div class="figure" style="text-align: center">
 <img src="fig-illustration.png" alt="Visualization of the work proposed by Mnih et al." width="1280" />
 <p class="caption">(\#fig:network-illustration)Visualization of the work proposed by Mnih et al.</p>
 </div>
 
-Even though human being can interact any environment based on this logic, it is hard to let computers have such performance too. But instead of training an agent that can do every thing in the world, we can train different agents for different task. [@Mnih2015] proposed an agent with some fascinating new features that can play old arcade games (Atari 2600 games). The agent is trained to play the games by observing the screen shots of the games (State $s_t$), the score of the game (Reward $r_t$) and by doing some magic the agent will take some action $\alpha_t$ which it believe will let it win the game(Fig \@ref(fig:network-illustration)). After the agent input the action they make, the game will change to a new state $s_{t+1}$ and the agent will receive a new reward $r_{t+1}$ (sometimes don't), and the agent will make a new action based on the new game stage until the game is over. We will discuss what is the magic that enable the agent to make decision and how will it let the agent learn how to play the game in the following chapters.
+Even though human being can interact with any environment based on this logic, it is hard to let computers have such performance. But instead of training an agent that can do every thing in the world, we can train different agents for different task. [@Mnih2015] proposed an agent with some fascinating new features that can play old arcade games (Atari 2600 games). The agent is trained to play the games by observing the screen shots of the games (State $s_t$), the score of the game (Reward $r_t$) and by doing some magic the agent will take some action $\alpha_t$ which it believes will let it win the game (Fig \@ref(fig:network-illustration)). After the agent input the action they make, the game will change to a new state $s_{t+1}$ and the agent will receive a new reward $r_{t+1}$ (sometimes don't), and the agent will make a new action based on the new game stage until the game is over. We will discuss what is the magic that enable the agent to make decision and how will it let the agent learn how to play the game in the following chapters.
 
 ## Q-learning Algorithm
 
@@ -177,7 +177,7 @@ Table \@ref(tab:tab1) shows that the agent benefits from both experience replay 
 
 ## Model Training
 
-The authors use RMSProp algorithm with a mini-batch size of 32 to train the agent. The behaviour policy during training is $\epsilon$-greedy policy with $\epsilon$ annealed linearly from 1 to 0.1 over the first million frames and fixed at 0.1 thereafter. The agent is trained for 50 million frames, which is equivalent to 38 days of game time and use a replay memory of size one million. Both the reward and errors ($r + \gamma \max_{a'}Q(s',a';\theta_i^-) - Q(s,a;\theta_i)$) are clipped at [-1,1], and actions are only selected on every fourth frame and repeated for the next three frames. This is less expensive to run and has little effect on the performance as the fastest humane player can only react every 6th frame. Hyperparameters are selected by 'informal search' (not e.g. grid search).
+The authors use RMSProp algorithm (Root Mean Square Propagation, is an optimization algorithm is an extension of Stochastic Gradient Descent (SGD) algorithm in tranning deep neural networks) with a mini-batch size of 32 to train the agent. The behaviour policy during training is $\epsilon$-greedy policy with $\epsilon$ annealed linearly from 1 to 0.1 over the first million frames and fixed at 0.1 thereafter. The agent is trained for 50 million frames, which is equivalent to 38 days of game time and use a replay memory of size one million. Both the reward and errors ($r + \gamma \max_{a'}Q(s',a';\theta_i^-) - Q(s,a;\theta_i)$) are clipped at [-1,1], and actions are only selected on every fourth frame and repeated for the next three frames. This is less expensive to run and has little effect on the performance as the fastest humane player can only react every 6th frame. Hyperparameters are selected by 'informal search' (not e.g. grid search).
 
 ## Algorithm
 
