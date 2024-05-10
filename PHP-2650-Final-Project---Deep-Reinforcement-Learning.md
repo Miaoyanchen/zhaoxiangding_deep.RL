@@ -50,7 +50,7 @@ We will begin by introducing the fundamentals of reinforcement learning known as
 
 # Reinforcement Learning
 <div class="figure" style="text-align: center">
-<img src="diagram.png" alt="Visualization of Reinforcement Learning" width="820" />
+<img src="diagram.png" alt="Visualization of Reinforcement Learning" width="2000" />
 <p class="caption">(\#fig:unnamed-chunk-1)Visualization of Reinforcement Learning</p>
 </div>
 
@@ -238,7 +238,7 @@ This video [@youtube] demonstrates how an agent is showing improvement over trai
 ## Summary
 -   Deep reinforcement learning is adapted from reinforcement learning, with abilities to learn more complex policies from high dimensional sensory input
 -   The goal is to maximize the cumulative future reward
--   Implement convolutional neural network as an approximator for the target values 
+-   DQN implements convolutional neural network as an approximator for the target values 
 -   Perform experience replay to remove correlations and stores the agent's experiences in a replay memory
 -   Minimize the mean square error between Q-network and Q-learning target
 -   The algorithm uses stochastic gradient descent to update the weights
