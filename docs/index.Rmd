@@ -223,12 +223,17 @@ embed_url("https://youtu.be/TmPfTpjtdgg")  %>%
 ```
 
 ## Summary
+
+```{r netillu, fig.cap = "How the magic works"}
+knitr::include_graphics("figure-net+illu.png")
+```
+
+
 -   Deep reinforcement learning is adapted from reinforcement learning, with abilities to learn more complex policies from high dimensional sensory input
 -   The goal is to maximize the cumulative future reward
 -   DQN implements convolutional neural network as an approximator for the target values 
 -   Perform experience replay to remove correlations and stores the agent's experiences in a replay memory
 -   Minimize the mean square error between Q-network and Q-learning target
--   The algorithm uses RMSProp with stochastic gradient descent to update the weights
 -   The DQN was tested on 49 Atari 2600 games, and it outperforms other reinforcement learning algorithms
 
 

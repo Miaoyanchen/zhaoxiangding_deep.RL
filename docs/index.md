@@ -225,12 +225,18 @@ This video [@youtube] demonstrates how an agent is showing improvement over trai
 ```
 
 ## Summary
+
+<div class="figure" style="text-align: center">
+<img src="figure-net+illu.png" alt="How the magic works" width="1778" />
+<p class="caption">(\#fig:netillu)How the magic works</p>
+</div>
+
+
 -   Deep reinforcement learning is adapted from reinforcement learning, with abilities to learn more complex policies from high dimensional sensory input
 -   The goal is to maximize the cumulative future reward
 -   DQN implements convolutional neural network as an approximator for the target values 
 -   Perform experience replay to remove correlations and stores the agent's experiences in a replay memory
 -   Minimize the mean square error between Q-network and Q-learning target
--   The algorithm uses RMSProp with stochastic gradient descent to update the weights
 -   The DQN was tested on 49 Atari 2600 games, and it outperforms other reinforcement learning algorithms
 
 
